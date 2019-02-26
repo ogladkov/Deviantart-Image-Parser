@@ -5,7 +5,6 @@ import os
 
 cycles = int(input('Type how many searchterms you will use: '))
 
-url = r'https://www.deviantart.com/popular-all-time/?q={0}&offset={1}'.format(kw_merged, offset)
 header={'User-Agent':"Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.134 Safari/537.36"}
 searchterm = []
 
@@ -30,7 +29,8 @@ def parse_da(key, qty):
         else:
             kw_merged += k
             
-#     offset = 
+    url = r'https://www.deviantart.com/popular-all-time/?q={0}&offset={1}'.format(kw_merged, qty)
+    
     urls = []
     for number in [str(o) for o in list(range(0, qty, 23))]:
         urls.append(r'https://www.deviantart.com/popular-all-time/?q={0}&offset={1}'.format(kw_merged, number))
@@ -40,7 +40,7 @@ def parse_da(key, qty):
     for url in urls:
         response = requests.Session()
         response = response.get(url, headers=header)
-        soup = BeautifulSoup(response.text)
+        soup = BeautifulSoup(response.text, "html5lib")
         for s in soup.body.findAll('a'):
             if str(s).startswith('<a class="torpedo-thumb-link"'):
                 row = (str(s).split(' '))
